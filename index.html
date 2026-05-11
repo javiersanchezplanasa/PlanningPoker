@@ -579,6 +579,18 @@
       box-shadow: 0 4px 10px rgba(63,156,53,0.3);
     }
 
+    @keyframes cardPick {
+      0%   { transform: translateY(0) scale(1) rotate(0deg); }
+      25%  { transform: translateY(-18px) scale(1.15) rotate(-4deg);
+             box-shadow: 0 16px 28px rgba(63,156,53,0.35); }
+      55%  { transform: translateY(-8px) scale(1.06) rotate(1deg); }
+      80%  { transform: translateY(-5px) scale(1.01); }
+      100% { transform: translateY(-4px) scale(1); }
+    }
+    .pick-tile.pick-anim {
+      animation: cardPick 0.42s cubic-bezier(.4,0,.2,1) forwards;
+    }
+
     /* ── Modal ── */
     .modal-overlay {
       display: none;
@@ -875,7 +887,10 @@
 
   /* ── Auto-join from URL ── */
   const urlRoom = new URLSearchParams(location.search).get('room');
-  if (urlRoom) setTimeout(() => openModal(urlRoom, ''), 120);
+  if (urlRoom) {
+    document.getElementById('landing').style.display = 'none';
+    setTimeout(() => openModal(urlRoom, ''), 80);
+  }
 
   /* ── Enter session ── */
   async function enter(sid, name, roomName) {
@@ -1083,6 +1098,13 @@
   /* ── Actions ── */
   async function castVote(v) {
     if (!sessionId) return;
+    const tile = document.querySelector(`.pick-tile[data-v="${v}"]`);
+    if (tile) {
+      tile.classList.remove('pick-anim');
+      void tile.offsetWidth; // force reflow to restart animation
+      tile.classList.add('pick-anim');
+      tile.addEventListener('animationend', () => tile.classList.remove('pick-anim'), { once: true });
+    }
     await update(ref(db, `sessions/${sessionId}/participants/${userId}`), { vote: v });
   }
 
