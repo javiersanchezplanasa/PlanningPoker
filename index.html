@@ -631,6 +631,15 @@
   </div>
 </div>
 
+<!-- ── MODAL DE NOMBRE ── -->
+<div id="nameModal" style="display:none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;">
+  <div style="background: var(--surface); border: 2px solid var(--primary); border-radius: 12px; padding: 2rem; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+    <h2 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem; font-weight: 700;">¿Cuál es tu nombre?</h2>
+    <input id="nameInputModal" type="text" placeholder="Ej: Javier" maxlength="32" style="width: 100%; padding: 0.8rem; border: 2px solid var(--primary); border-radius: 8px; font-size: 1rem; margin-bottom: 1.5rem; font-family: inherit;" />
+    <button id="confirmNameBtn" style="width: 100%; background: var(--primary); color: #fff; padding: 0.8rem; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; transition: all 0.2s;">Entrar a la sala</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- ── SCRIPT ── -->
@@ -670,6 +679,12 @@
   window.revealVotes      = revealVotes;
   window.newRound         = newRound;
   window.copyLink         = copyLink;
+
+  /* ── Modal event listeners ── */
+  document.getElementById('confirmNameBtn').addEventListener('click', confirmName);
+  document.getElementById('nameInputModal').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') confirmName();
+  });
 
   /* ── Helpers ── */
   function uid(len = 6) { return Math.random().toString(36).slice(2, 2 + len).toUpperCase(); }
@@ -720,14 +735,27 @@
     });
   }
 
+  function showNameModal(sid, roomName) {
+    pendingSessionId = sid;
+    pendingRoomName = roomName;
+    const modal = document.getElementById('nameModal');
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    setTimeout(() => document.getElementById('nameInputModal').focus(), 50);
+  }
+
+  function confirmName() {
+    const name = document.getElementById('nameInputModal').value.trim();
+    if (!name) { showToast('Escribe tu nombre'); return; }
+    document.getElementById('nameModal').style.display = 'none';
+    document.getElementById('nameInputModal').value = '';
+    enter(pendingSessionId, name, pendingRoomName);
+  }
+
   function enterSession() {
     if (!pendingSessionId || !pendingRoomName) return;
-    const name = prompt('¿Cuál es tu nombre?');
-    if (name && name.trim()) {
-      enter(pendingSessionId, name.trim(), pendingRoomName);
-    } else if (name !== null) {
-      showToast('Nombre requerido');
-    }
+    showNameModal(pendingSessionId, pendingRoomName);
   }
 
   function backToLanding() {
@@ -735,6 +763,7 @@
     pendingSessionId = null;
     document.getElementById('landingView').style.display = 'block';
     document.getElementById('linkView').style.display = 'none';
+    document.getElementById('nameModal').style.display = 'none';
   }
 
   /* ── Auto-join from URL ── */
@@ -742,10 +771,7 @@
   if (urlSessionId && !sessionId) {
     // Esperar a que DOM esté listo
     setTimeout(() => {
-      const name = prompt('¿Cuál es tu nombre para entrar a la sala?');
-      if (name && name.trim()) {
-        enter(urlSessionId, name.trim(), 'Sala compartida');
-      }
+      showNameModal(urlSessionId, 'Sala compartida');
     }, 100);
   }
 
@@ -773,14 +799,13 @@
     const meRef = ref(db, `sessions/${sessionId}/participants/${userId}`);
     await set(meRef, { name, vote: null });
 
-    /* When I disconnect, remove myself. If no one's left, clean up session. */
+    /* When I disconnect, only remove myself from participants */
     onDisconnect(meRef).remove();
-    onDisconnect(ref(db, `sessions/${sessionId}`)).set({ deletedAt: Date.now() });
 
     /* Update URL for sharing */
     const u = new URL(location.href);
     u.searchParams.set('s', sessionId);
-    history.replaceState({}, '', u);
+    window.history.replaceState({}, '', u);
 
     /* Show session UI */
     document.getElementById('roomCode').textContent  = sessionId;
