@@ -762,7 +762,7 @@
 <div class="modal-overlay" id="nameModal">
   <div class="modal-box">
     <h2>¿Cuál es tu nombre?</h2>
-    <p>Lo verán el resto de participantes de la sala.</p>
+    <p id="modalSubtitle">Lo verán el resto de participantes de la sala.</p>
     <label for="nameInputModal">Tu nombre</label>
     <input id="nameInputModal" type="text" placeholder="Ej: Javier" maxlength="32" />
     <button class="btn btn-green" id="confirmNameBtn">Entrar a la sala →</button>
@@ -843,9 +843,11 @@
     pendingSessionId = randId(8);
     const link = new URL(location.href);
     link.searchParams.set('room', pendingSessionId);
-    document.getElementById('shareLink').value = link.toString();
-    document.getElementById('landingView').style.display = 'none';
-    document.getElementById('linkView').style.display   = 'block';
+    const linkStr = link.toString();
+    navigator.clipboard.writeText(linkStr)
+      .then(() => {})
+      .catch(() => showToast(linkStr, 7000));
+    openModal(pendingSessionId, pendingRoomName, true);
   }
 
   function copyShareLink() {
@@ -867,12 +869,18 @@
   }
 
   /* ── Modal ── */
-  function openModal(sid, roomName) {
+  function openModal(sid, roomName, isCreator = false) {
     pendingSessionId = sid;
     pendingRoomName  = roomName;
+    const subtitle = document.getElementById('modalSubtitle');
+    if (isCreator) {
+      subtitle.innerHTML = '🔗 El enlace ya está copiado en tu portapapeles.<br><span style="color:var(--text-secondary)">Compártelo con tu equipo.</span>';
+    } else {
+      subtitle.textContent = 'Lo verán el resto de participantes de la sala.';
+    }
     const m = document.getElementById('nameModal');
-    m.style.display     = 'flex';
-    m.style.alignItems  = 'center';
+    m.style.display        = 'flex';
+    m.style.alignItems     = 'center';
     m.style.justifyContent = 'center';
     setTimeout(() => document.getElementById('nameInputModal').focus(), 50);
   }
