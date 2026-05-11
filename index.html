@@ -3,42 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Planning Poker</title>
+  <title>Planning Poker · Planasa</title>
   <style>
     :root {
-      --primary: #3F9C35;
+      --primary:       #3F9C35;
       --primary-light: #5CB85F;
-      --primary-dark: #2B6F25;
-      --bg: #fafafa;
-      --surface: #ffffff;
-      --surface2: #f5f5f5;
-      --text: #1a1a1a;
-      --text-secondary: #666666;
-      --border: #e0e0e0;
-      --success: #3F9C35;
-      --error: #d32f2f;
-      --radius: 8px;
+      --primary-dark:  #2B6F25;
+      --primary-bg:    #f0f7ef;
+      --bg:            #f4f4f4;
+      --surface:       #ffffff;
+      --surface2:      #f9f9f9;
+      --text:          #1a1a1a;
+      --text-secondary:#6b6b6b;
+      --border:        #e2e2e2;
+      --radius:        8px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-    }
-
+    html, body { height: 100%; overflow: hidden; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
-      display: flex;
-      flex-direction: column;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
 
-    /* ── Landing ── */
+    /* ════════════════════════════
+       LANDING
+    ════════════════════════════ */
     #landing {
       display: flex;
       flex-direction: column;
@@ -46,450 +38,581 @@
       justify-content: center;
       min-height: 100vh;
       padding: 2rem;
-      background: linear-gradient(135deg, #fafafa 0%, #f0f7f0 100%);
+      background: linear-gradient(160deg, #fafafa 0%, #eef7ee 100%);
     }
 
-    .logo { font-size: 4rem; margin-bottom: 0.5rem; }
+    .logo { font-size: 3.5rem; margin-bottom: 0.4rem; }
 
     h1 {
-      font-size: 2.5rem;
+      font-size: 2.2rem;
       font-weight: 700;
       color: var(--primary-dark);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.3rem;
       letter-spacing: -0.5px;
     }
 
-    .subtitle { color: var(--text-secondary); margin-bottom: 2.5rem; font-size: 1rem; }
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
 
     .panel {
       background: var(--surface);
-      border: 2px solid var(--primary);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--primary);
       border-radius: var(--radius);
-      padding: 2.5rem;
+      padding: 2rem;
       width: 100%;
-      max-width: 460px;
-      box-shadow: 0 2px 8px rgba(63, 156, 53, 0.08);
+      max-width: 420px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     }
 
-    .panel h2 { font-size: 1rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--primary); }
-
-    label { display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-
-    input {
-      width: 100%;
-      background: var(--surface2);
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      padding: 0.85rem 1rem;
-      color: var(--text);
-      font-size: 1rem;
-      outline: none;
-      transition: all 0.2s;
+    .panel-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       margin-bottom: 1.25rem;
     }
-    input:focus {
-      border-color: var(--primary);
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(63, 156, 53, 0.1);
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
     }
 
-    button {
+    input[type="text"] {
+      width: 100%;
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 1rem;
+    }
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(63,156,53,0.12);
+      background: #fff;
+    }
+
+    .btn {
       cursor: pointer;
       border: none;
       border-radius: var(--radius);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
-      padding: 0.9rem 1.5rem;
+      padding: 0.75rem 1.25rem;
+      font-family: inherit;
       transition: all 0.2s;
-      user-select: none;
+      width: 100%;
+      display: block;
     }
-
-    .btn-primary {
+    .btn-green {
       background: var(--primary);
       color: #fff;
-      width: 100%;
     }
-    .btn-primary:hover {
-      background: var(--primary-dark);
-    }
-    .btn-primary:active { transform: scale(0.98); }
-
-    .btn-ghost {
+    .btn-green:hover { background: var(--primary-dark); }
+    .btn-outline {
       background: transparent;
       color: var(--primary);
-      border: 2px solid var(--primary);
-      width: 100%;
+      border: 1.5px solid var(--primary);
+      margin-top: 0.75rem;
     }
-    .btn-ghost:hover {
-      background: rgba(63, 156, 53, 0.05);
-    }
+    .btn-outline:hover { background: var(--primary-bg); }
 
-    .divider {
-      display: flex; align-items: center; gap: 1rem;
-      margin: 1.5rem 0; color: var(--text-secondary); font-size: 0.85rem;
-    }
-    .divider::before, .divider::after {
-      content: ''; flex: 1; height: 1px; background: var(--border);
-    }
-
-    /* ── Session ── */
-    #session {
-      display: none;
-      flex-direction: row;
-      flex: 1;
-      background: var(--bg);
-    }
-
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: var(--surface);
-      border-bottom: 2px solid var(--primary);
-      padding: 1rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      z-index: 100;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .header-brand { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; font-size: 1.1rem; color: var(--primary); }
-
-    .share-badge {
-      display: flex; align-items: center; gap: 0.5rem;
-      background: rgba(63, 156, 53, 0.08);
-      border: 2px solid var(--primary);
+    .link-box {
+      background: var(--surface2);
+      border: 1.5px solid var(--primary);
       border-radius: var(--radius);
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
-      color: var(--primary);
-      cursor: pointer;
-      transition: all 0.2s;
-      user-select: none;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
     }
-    .share-badge:hover {
-      background: rgba(63, 156, 53, 0.15);
-    }
-    .share-badge code {
-      color: var(--primary-dark);
-      font-family: 'Monaco', 'Courier New', monospace;
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
-
-    .header-name { font-size: 0.9rem; color: var(--text-secondary); }
-    .header-name strong { color: var(--primary); }
-
-    /* ── Sidebar historial ── */
-    .sidebar {
-      width: 280px;
-      background: var(--surface);
-      border-right: 2px solid var(--primary);
-      overflow-y: auto;
-      padding: 5.5rem 1rem 1rem 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .sidebar-title {
-      font-size: 0.75rem;
+    .link-box-label {
+      font-size: 0.72rem;
       font-weight: 700;
       color: var(--primary);
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
     }
-
-    .history-item {
-      background: var(--surface2);
-      border: 2px solid var(--primary);
-      border-radius: var(--radius);
-      padding: 0.85rem;
-      font-size: 0.78rem;
-    }
-
-    .history-round {
-      color: var(--primary);
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-      font-size: 0.8rem;
-    }
-
-    .history-votes {
-      color: var(--text-secondary);
-      margin-bottom: 0.4rem;
-      line-height: 1.4;
-      font-size: 0.75rem;
-    }
-
-    .history-avg {
-      background: rgba(63, 156, 53, 0.1);
-      border-left: 3px solid var(--primary);
-      padding-left: 0.6rem;
-      color: var(--primary-dark);
-      font-weight: 700;
-      font-size: 0.8rem;
-    }
-
-    .sidebar-empty {
-      color: var(--text-secondary);
-      text-align: center;
-      padding: 2rem 0;
-      font-size: 0.8rem;
-    }
-
-    .main {
-      flex: 1;
-      padding: 5.5rem 1.5rem 1.5rem 1.5rem;
+    .link-row {
       display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      margin-top: 0;
-    }
-
-    /* ── Poker Table ── */
-    .table {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
-      perspective: 1200px;
-    }
-
-    .table-ellipse {
-      position: relative;
-      width: 90%;
-      max-width: 700px;
-      aspect-ratio: 16 / 9;
-      background: linear-gradient(135deg, #f0f7f0 0%, #e8f4e8 100%);
-      border: 3px solid var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(63, 156, 53, 0.15);
-    }
-
-    .table-inner {
-      width: 95%;
-      height: 95%;
-      border-radius: 50%;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .seats {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .seat {
-      position: absolute;
-      width: 120px;
-      height: 140px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
       gap: 0.5rem;
     }
+    .link-row input {
+      flex: 1;
+      margin-bottom: 0;
+      font-size: 0.82rem;
+      padding: 0.55rem 0.75rem;
+    }
+    .link-copy-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      padding: 0 0.9rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .link-copy-btn:hover { background: var(--primary-dark); }
 
-    /* Positioned seats around table */
-    .seat:nth-child(1) { top: -50px; }
-    .seat:nth-child(2) { right: -30px; top: 15%; }
-    .seat:nth-child(3) { right: -30px; bottom: 15%; }
-    .seat:nth-child(4) { bottom: -50px; }
-    .seat:nth-child(5) { left: -30px; bottom: 15%; }
-    .seat:nth-child(6) { left: -30px; top: 15%; }
+    .hint {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-top: 1rem;
+      line-height: 1.5;
+    }
 
-    @media (min-width: 900px) {
-      .seat:nth-child(7) { top: 20%; right: 10%; }
-      .seat:nth-child(8) { bottom: 20%; right: 10%; }
-      .seat:nth-child(9) { bottom: 20%; left: 10%; }
-      .seat:nth-child(10) { top: 20%; left: 10%; }
+    /* ════════════════════════════
+       SESSION LAYOUT
+    ════════════════════════════ */
+    #session {
+      display: none;
+      flex-direction: row;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .sess-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 52px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 1.25rem;
+      gap: 0.75rem;
+      z-index: 200;
+    }
+
+    .sess-brand {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-shrink: 0;
+    }
+
+    .sess-room-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--primary-bg);
+      border: 1px solid rgba(63,156,53,0.25);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .sess-spacer { flex: 1; }
+
+    .sess-share-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 0.35rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .sess-share-btn:hover { background: var(--primary-dark); }
+
+    .sess-user {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+    .sess-user strong { color: var(--text); font-weight: 600; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 64px 0.75rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      overflow-y: auto;
+    }
+
+    .sidebar-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 0.25rem 0;
+    }
+
+    .hist-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--primary);
+      border-radius: 6px;
+      padding: 0.65rem 0.75rem;
+    }
+    .hist-round {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 0.3rem;
+    }
+    .hist-votes {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.3rem;
+      line-height: 1.5;
+    }
+    .hist-avg {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .hist-empty {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      text-align: center;
+      padding: 1.5rem 0;
+      line-height: 1.6;
+    }
+
+    /* ── Main ── */
+    .sess-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding-top: 52px;
+    }
+
+    /* ── Table area ── */
+    .table-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1.5rem 1rem 0.75rem;
+      overflow: hidden;
+    }
+
+    /* Status */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.3rem 0.9rem;
+    }
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* Table */
+    .table-wrap {
+      position: relative;
+      width: min(540px, 88%);
+      aspect-ratio: 16 / 8;
+    }
+
+    .table-felt {
+      position: absolute;
+      inset: 0;
+      background: var(--primary-bg);
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.05), 0 2px 10px rgba(63,156,53,0.1);
+    }
+
+    .table-center-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: rgba(63,156,53,0.35);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    /* Seats — positioned by JS */
+    .seat {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      transform: translate(-50%, -50%);
     }
 
     .card-flipper {
-      width: 80px;
-      height: 110px;
-      perspective: 1000px;
-      position: relative;
+      width: 50px;
+      height: 70px;
+      perspective: 700px;
     }
 
     .card-inner {
-      position: relative;
       width: 100%;
       height: 100%;
-      transition: transform 0.6s;
+      position: relative;
+      transition: transform 0.5s cubic-bezier(.4,0,.2,1);
       transform-style: preserve-3d;
     }
-
     .card-inner.flipped { transform: rotateY(180deg); }
 
     .card-face {
       position: absolute;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       backface-visibility: hidden;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 8px;
       font-weight: 700;
-      font-size: 1.8rem;
-      border: 2px solid var(--primary);
     }
 
-    .card-back {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    .card-back-face {
+      background: var(--primary);
+      border: 2px solid var(--primary-dark);
       color: #fff;
-      box-shadow: 0 4px 12px rgba(63, 156, 53, 0.25);
+      font-size: 0.9rem;
+    }
+    .card-back-face.waiting {
+      background: var(--surface);
+      border: 2px dashed var(--border);
+      color: var(--border);
     }
 
-    .card-front {
+    .card-front-face {
       background: #fff;
+      border: 2px solid var(--primary);
       color: var(--primary);
+      font-size: 1.4rem;
       transform: rotateY(180deg);
     }
-
-    .card-front.voted { border-color: var(--success); }
+    .card-front-face.consensus {
+      background: var(--primary-bg);
+      border-color: var(--primary);
+      color: var(--primary-dark);
+    }
 
     .p-name {
-      font-size: 0.8rem;
+      font-size: 0.68rem;
+      font-weight: 600;
       color: var(--text-secondary);
-      max-width: 110px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+      max-width: 72px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      text-align: center;
-      font-weight: 600;
     }
-    .p-name.me { color: var(--primary); font-weight: 700; }
+    .p-name.me {
+      color: var(--primary);
+      background: var(--primary-bg);
+      border-color: rgba(63,156,53,0.3);
+    }
 
-    /* ── Results ── */
-    .results {
-      background: rgba(42, 31, 71, 0.4);
-      border: 2px solid var(--primary);
+    /* Results */
+    .results-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--primary);
       border-radius: var(--radius);
-      padding: 1.25rem;
+      padding: 0.9rem 2rem;
       text-align: center;
-      backdrop-filter: blur(10px);
+      width: min(480px, 90%);
     }
     .results-title {
-      font-size: 0.75rem; text-transform: uppercase;
-      letter-spacing: .15em; color: var(--primary); margin-bottom: 0.75rem; font-weight: 700;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.6rem;
     }
-    .stats { display: flex; justify-content: center; gap: 2.5rem; }
-    .stat-val { font-size: 2.2rem; font-weight: 800; color: var(--primary); display: block; }
-    .stat-lbl { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.2rem; }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    .stat-val {
+      display: block;
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .stat-lbl {
+      font-size: 0.68rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
 
-    /* ── Controls ── */
+    /* Controls */
     .controls {
       display: flex;
-      gap: 1rem;
+      gap: 0.6rem;
       justify-content: center;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
     }
 
-    .btn-action {
-      padding: 0.7rem 1.8rem;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      transition: all 0.25s;
+    .ctrl-btn {
       border: none;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.5rem 1.4rem;
       cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
     }
-
-    .btn-reveal {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    .ctrl-reveal {
+      background: var(--primary);
       color: #fff;
-      box-shadow: 0 4px 15px rgba(124, 106, 255, 0.3);
     }
-    .btn-reveal:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(124, 106, 255, 0.5);
+    .ctrl-reveal:hover:not(:disabled) { background: var(--primary-dark); }
+    .ctrl-reveal:disabled { opacity: 0.35; cursor: not-allowed; }
+    .ctrl-reset {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
     }
-    .btn-reveal:disabled { opacity: 0.3; cursor: not-allowed; }
+    .ctrl-reset:hover { background: var(--surface2); }
 
-    .btn-new {
-      background: rgba(212, 175, 55, 0.2);
-      color: var(--primary);
-      border: 2px solid var(--primary);
-    }
-    .btn-new:hover {
-      background: rgba(212, 175, 55, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
-    }
-
-    /* ── Pick cards ── */
+    /* ── Pick section ── */
     .pick-section {
-      margin-top: auto;
-      padding-top: 1.5rem;
-      border-top: 2px solid rgba(212, 175, 55, 0.2);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 0.85rem 1.25rem 1rem;
       transition: opacity 0.3s;
     }
 
     .pick-label {
-      text-align: center;
-      font-size: 0.9rem;
-      color: var(--primary);
-      margin-bottom: 1rem;
+      font-size: 0.7rem;
       font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin-bottom: 0.6rem;
     }
 
     .pick-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.6rem;
+      gap: 0.45rem;
       justify-content: center;
     }
 
     .pick-tile {
-      width: 50px;
-      height: 70px;
-      border-radius: 8px;
+      width: 44px;
+      height: 62px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      border: 2px solid rgba(212, 175, 55, 0.3);
-      background: rgba(42, 31, 71, 0.5);
+      border: 1.5px solid var(--border);
+      background: var(--surface2);
       cursor: pointer;
       transition: all 0.15s;
-      color: var(--text-secondary);
+      color: var(--text);
       user-select: none;
     }
-
     .pick-tile:hover {
       border-color: var(--primary);
       color: var(--primary);
-      transform: translateY(-3px);
-      background: rgba(42, 31, 71, 0.8);
+      background: var(--primary-bg);
+      transform: translateY(-4px);
+      box-shadow: 0 4px 8px rgba(63,156,53,0.15);
+    }
+    .pick-tile.selected {
+      background: var(--primary);
+      border-color: var(--primary-dark);
+      color: #fff;
+      transform: translateY(-4px);
+      box-shadow: 0 4px 10px rgba(63,156,53,0.3);
     }
 
-    .pick-tile.selected {
-      border-color: var(--primary);
-      background: rgba(124, 106, 255, 0.25);
-      color: var(--primary-light);
-      transform: translateY(-5px);
-      box-shadow: 0 4px 15px rgba(124, 106, 255, 0.2);
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 2rem;
+      width: 90%;
+      max-width: 380px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .modal-box h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .modal-box p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+    }
+    .modal-box input[type="text"] {
+      margin-bottom: 1rem;
     }
 
     /* ── Toast ── */
@@ -497,120 +620,106 @@
       position: fixed;
       bottom: 1.5rem;
       left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: rgba(26, 26, 36, 0.95);
-      border: 2px solid var(--primary);
-      color: var(--primary);
-      padding: 0.8rem 1.6rem;
-      border-radius: 10px;
-      font-size: 0.9rem;
+      transform: translateX(-50%) translateY(60px);
+      background: #1a1a1a;
+      color: #fff;
+      padding: 0.6rem 1.25rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
       transition: transform 0.3s;
       z-index: 999;
       white-space: nowrap;
-      backdrop-filter: blur(10px);
+      pointer-events: none;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
-    @media (max-width: 1024px) {
-      .sidebar { width: 240px; }
-      .main { padding: 5.5rem 1rem 1rem 1rem; }
-    }
-
-    @media (max-width: 768px) {
-      h1 { font-size: 2rem; }
-      .panel { padding: 1.8rem; }
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
       .sidebar { display: none; }
-      .main { padding: 5.5rem 1rem 1rem 1rem; }
-      .table { gap: 1.5rem; }
-      .table-ellipse { max-width: 95%; }
-      .seat { width: 100px; height: 120px; }
-      .card-flipper { width: 65px; height: 90px; }
-      .card-face { font-size: 1.4rem; }
-      .stats { gap: 1.5rem; }
-      .stat-val { font-size: 1.8rem; }
-      .pick-tile { width: 45px; height: 63px; font-size: 1rem; }
     }
-
-    @media (max-width: 500px) {
-      header { padding: 0.8rem 1rem; }
-      .logo { font-size: 2.5rem; }
-      h1 { font-size: 1.6rem; }
-      .panel { padding: 1.5rem; max-width: 100%; }
-      .table-ellipse { max-width: 98%; }
-      .seat:nth-child(n+7) { display: none; }
-      .seat { width: 85px; height: 110px; }
-      .card-flipper { width: 55px; height: 78px; }
-      .card-face { font-size: 1.2rem; border-width: 1.5px; }
-      .pick-tile { width: 40px; height: 56px; font-size: 0.95rem; }
-      .results { padding: 1rem; }
-      .stats { gap: 1rem; }
-      .stat-val { font-size: 1.6rem; }
-      .controls { gap: 0.5rem; }
-      .btn-action { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+    @media (max-width: 600px) {
+      .sess-room-name { display: none; }
+      .sess-user { display: none; }
+      .table-wrap { width: 96%; }
+      .card-flipper { width: 40px; height: 56px; }
+      .card-front-face { font-size: 1.1rem; }
+      .pick-tile { width: 38px; height: 54px; font-size: 0.85rem; }
+      .stats { gap: 1.5rem; }
+      .stat-val { font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── LANDING ── -->
+<!-- ══════════════════════════
+     LANDING
+══════════════════════════ -->
 <div id="landing">
   <div class="logo">🃏</div>
   <h1>Planning Poker</h1>
-  <p class="subtitle">Estima en equipo, sin anclar los votos</p>
+  <p class="subtitle">Estima en equipo · Sin anclar los votos</p>
 
   <div class="panel">
-    <h2>Planning Poker</h2>
-
     <div id="landingView">
+      <div class="panel-title">Crear sala</div>
       <label for="roomNameInput">Nombre de la sala</label>
-      <input id="roomNameInput" type="text" placeholder="Ej: Sprint Planning" maxlength="32" />
-      <button class="btn-primary" onclick="createNewSession()">✦ Crear sala</button>
-      <p style="font-size: 0.8rem; color: var(--text-secondary); text-align: center; margin-top: 1rem;">
-        O accede a través del enlace que compartieron contigo
-      </p>
+      <input id="roomNameInput" type="text" placeholder="Ej: Sprint Planning" maxlength="40" />
+      <button class="btn btn-green" onclick="createNewSession()">Crear sala →</button>
+      <p class="hint">¿Te han compartido un enlace?<br>Ábrelo directamente en el navegador.</p>
     </div>
 
     <div id="linkView" style="display:none">
-      <div style="background: var(--surface2); border: 2px solid var(--primary); border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem;">
-        <div style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.8rem;">Comparte este enlace</div>
-        <div style="display: flex; gap: 0.5rem;">
-          <input id="shareLink" type="text" readonly style="flex: 1; font-size: 0.85rem; padding: 0.6rem;" />
-          <button onclick="copyShareLink()" style="background: var(--primary); color: #fff; padding: 0.6rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">📋</button>
+      <div class="panel-title">Sala creada</div>
+      <div class="link-box">
+        <div class="link-box-label">Comparte este enlace</div>
+        <div class="link-row">
+          <input id="shareLink" type="text" readonly />
+          <button class="link-copy-btn" onclick="copyShareLink()">📋</button>
         </div>
       </div>
-      <button class="btn-primary" onclick="enterSession()">Entrar a la sala</button>
-      <button class="btn-ghost" style="margin-top: 0.75rem;" onclick="backToLanding()">← Atrás</button>
+      <button class="btn btn-green" onclick="enterSession()">Entrar a la sala</button>
+      <button class="btn btn-outline" onclick="backToLanding()">← Atrás</button>
     </div>
   </div>
 </div>
 
-<!-- ── SESSION ── -->
+<!-- ══════════════════════════
+     SESSION
+══════════════════════════ -->
 <div id="session">
-  <header>
-    <div class="header-brand">🃏 Planning Poker</div>
-    <div class="share-badge" onclick="copyLink()" title="Copiar enlace de invitación">
-      🔗 Sala&nbsp;<code id="roomCode"></code>&nbsp;· copiar enlace
-    </div>
-    <div class="header-name">Hola, <strong id="myNameDisplay"></strong></div>
+
+  <header class="sess-header">
+    <span class="sess-brand">🃏 Planasa Poker</span>
+    <span class="sess-room-name" id="sessRoomName"></span>
+    <div class="sess-spacer"></div>
+    <button class="sess-share-btn" onclick="copyLink()">🔗 Compartir enlace</button>
+    <span class="sess-user">Hola, <strong id="myNameDisplay"></strong></span>
   </header>
 
   <aside class="sidebar">
-    <div class="sidebar-title">📊 Historial</div>
+    <div class="sidebar-title">Historial</div>
     <div id="historyContainer">
-      <div class="sidebar-empty">Sin rondas votadas</div>
+      <div class="hist-empty">Aquí aparecerán<br>las rondas votadas</div>
     </div>
   </aside>
 
-  <div class="main">
-    <div class="table">
-      <div class="table-ellipse">
-        <div class="table-inner">
-          <div class="seats" id="participantsSeats"></div>
-        </div>
+  <div class="sess-main">
+    <div class="table-area">
+
+      <div class="status-bar">
+        <div class="status-dot"></div>
+        <span id="statusText">Esperando votos…</span>
       </div>
 
-      <div id="resultsBox" class="results" style="display:none">
-        <div class="results-title">📊 Resultados de la ronda</div>
+      <div class="table-wrap" id="tableWrap">
+        <div class="table-felt"></div>
+        <div class="table-center-text" id="tableCenterText">Planning Poker</div>
+        <!-- seats injected by JS -->
+      </div>
+
+      <div id="resultsPanel" class="results-panel" style="display:none">
+        <div class="results-title">Resultados de la ronda</div>
         <div class="stats">
           <div><span class="stat-val" id="resAvg">—</span><span class="stat-lbl">Media</span></div>
           <div><span class="stat-val" id="resMin">—</span><span class="stat-lbl">Mínimo</span></div>
@@ -619,36 +728,45 @@
       </div>
 
       <div class="controls">
-        <button class="btn-action btn-reveal" id="revealBtn" onclick="revealVotes()" disabled>👁 Revelar votos</button>
-        <button class="btn-action btn-new" onclick="newRound()">↺ Nueva ronda</button>
+        <button class="ctrl-btn ctrl-reveal" id="revealBtn" onclick="revealVotes()" disabled>
+          👁 Revelar votos
+        </button>
+        <button class="ctrl-btn ctrl-reset" onclick="newRound()">↺ Nueva ronda</button>
       </div>
+
     </div>
 
     <div class="pick-section" id="pickSection">
-      <p class="pick-label">Elige tu carta</p>
+      <div class="pick-label">Elige tu carta</div>
       <div class="pick-row" id="pickRow"></div>
     </div>
   </div>
+
 </div>
 
-<!-- ── MODAL DE NOMBRE ── -->
-<div id="nameModal" style="display:none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;">
-  <div style="background: var(--surface); border: 2px solid var(--primary); border-radius: 12px; padding: 2rem; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-    <h2 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem; font-weight: 700;">¿Cuál es tu nombre?</h2>
-    <input id="nameInputModal" type="text" placeholder="Ej: Javier" maxlength="32" style="width: 100%; padding: 0.8rem; border: 2px solid var(--primary); border-radius: 8px; font-size: 1rem; margin-bottom: 1.5rem; font-family: inherit;" />
-    <button id="confirmNameBtn" style="width: 100%; background: var(--primary); color: #fff; padding: 0.8rem; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; transition: all 0.2s;">Entrar a la sala</button>
+<!-- ══════════════════════════
+     MODAL NOMBRE
+══════════════════════════ -->
+<div class="modal-overlay" id="nameModal">
+  <div class="modal-box">
+    <h2>¿Cuál es tu nombre?</h2>
+    <p>Lo verán el resto de participantes de la sala.</p>
+    <label for="nameInputModal">Tu nombre</label>
+    <input id="nameInputModal" type="text" placeholder="Ej: Javier" maxlength="32" />
+    <button class="btn btn-green" id="confirmNameBtn">Entrar a la sala →</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- ── SCRIPT ── -->
+<!-- ══════════════════════════
+     SCRIPT
+══════════════════════════ -->
 <script type="module">
-  import { initializeApp }  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-  import { getDatabase, ref, set, update, onValue, remove, onDisconnect }
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getDatabase, ref, set, update, onValue, onDisconnect }
     from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-  /* ── Firebase config ── */
   const app = initializeApp({
     apiKey: "AIzaSyBRPoW4Z6jnOWmYMRDGnQJwJHQVNB48Yr4",
     authDomain: "planningpoker-74969.firebaseapp.com",
@@ -660,18 +778,19 @@
   });
   const db = getDatabase(app);
 
-  /* ── Constants ── */
   const CARDS = ['1','2','3','5','8','13','21','40','?','☕'];
 
   /* ── State ── */
-  let sessionId    = null;
-  let userId       = null;
-  let myName       = null;
-  let myVote       = null;
-  let history      = [];
-  let sessionTimer = null;
+  let sessionId        = null;
+  let userId           = null;
+  let myName           = null;
+  let myVote           = null;
+  let roundHistory     = [];
+  let cleanupTimer     = null;
+  let pendingSessionId = null;
+  let pendingRoomName  = null;
 
-  /* ── Expose to HTML onclick ── */
+  /* ── Expose globals ── */
   window.createNewSession = createNewSession;
   window.copyShareLink    = copyShareLink;
   window.enterSession     = enterSession;
@@ -680,18 +799,20 @@
   window.newRound         = newRound;
   window.copyLink         = copyLink;
 
-  /* ── Modal event listeners ── */
+  /* ── Modal wiring ── */
   document.getElementById('confirmNameBtn').addEventListener('click', confirmName);
-  document.getElementById('nameInputModal').addEventListener('keypress', (e) => {
+  document.getElementById('nameInputModal').addEventListener('keydown', e => {
     if (e.key === 'Enter') confirmName();
   });
 
   /* ── Helpers ── */
-  function uid(len = 6) { return Math.random().toString(36).slice(2, 2 + len).toUpperCase(); }
+  function randId(n = 8) {
+    return Math.random().toString(36).slice(2, 2 + n).toUpperCase();
+  }
 
   function localUserId() {
     let id = localStorage.getItem('pp_uid');
-    if (!id) { id = uid(14); localStorage.setItem('pp_uid', id); }
+    if (!id) { id = randId(14); localStorage.setItem('pp_uid', id); }
     return id;
   }
 
@@ -702,46 +823,45 @@
     setTimeout(() => el.classList.remove('show'), ms);
   }
 
-  /* ── Entry points ── */
-  let pendingRoomName = null;
-  let pendingSessionId = null;
-
-  function generateSessionId() {
-    return uid(8);
-  }
-
+  /* ── Landing flow ── */
   function createNewSession() {
     const roomName = document.getElementById('roomNameInput').value.trim();
     if (!roomName) { showToast('Escribe el nombre de la sala'); return; }
-
-    pendingRoomName = roomName;
-    pendingSessionId = generateSessionId();
-
+    pendingRoomName  = roomName;
+    pendingSessionId = randId(8);
     const link = new URL(location.href);
     link.searchParams.set('room', pendingSessionId);
     document.getElementById('shareLink').value = link.toString();
-
     document.getElementById('landingView').style.display = 'none';
-    document.getElementById('linkView').style.display = 'block';
+    document.getElementById('linkView').style.display   = 'block';
   }
 
   function copyShareLink() {
-    const link = document.getElementById('shareLink');
-    link.select();
-    navigator.clipboard.writeText(link.value).then(() => {
-      showToast('¡Enlace copiado!');
-    }).catch(() => {
-      showToast(link.value, 5000);
-    });
+    const val = document.getElementById('shareLink').value;
+    navigator.clipboard.writeText(val)
+      .then(() => showToast('¡Enlace copiado!'))
+      .catch(() => showToast(val, 6000));
   }
 
-  function showNameModal(sid, roomName) {
+  function enterSession() {
+    if (!pendingSessionId || !pendingRoomName) return;
+    openModal(pendingSessionId, pendingRoomName);
+  }
+
+  function backToLanding() {
+    pendingSessionId = pendingRoomName = null;
+    document.getElementById('landingView').style.display = 'block';
+    document.getElementById('linkView').style.display   = 'none';
+  }
+
+  /* ── Modal ── */
+  function openModal(sid, roomName) {
     pendingSessionId = sid;
-    pendingRoomName = roomName;
-    const modal = document.getElementById('nameModal');
-    modal.style.display = 'flex';
-    modal.style.alignItems = 'center';
-    modal.style.justifyContent = 'center';
+    pendingRoomName  = roomName;
+    const m = document.getElementById('nameModal');
+    m.style.display     = 'flex';
+    m.style.alignItems  = 'center';
+    m.style.justifyContent = 'center';
     setTimeout(() => document.getElementById('nameInputModal').focus(), 50);
   }
 
@@ -749,110 +869,80 @@
     const name = document.getElementById('nameInputModal').value.trim();
     if (!name) { showToast('Escribe tu nombre'); return; }
     document.getElementById('nameModal').style.display = 'none';
-    document.getElementById('nameInputModal').value = '';
+    document.getElementById('nameInputModal').value    = '';
     enter(pendingSessionId, name, pendingRoomName);
   }
 
-  function enterSession() {
-    if (!pendingSessionId || !pendingRoomName) return;
-    showNameModal(pendingSessionId, pendingRoomName);
-  }
-
-  function backToLanding() {
-    pendingRoomName = null;
-    pendingSessionId = null;
-    document.getElementById('landingView').style.display = 'block';
-    document.getElementById('linkView').style.display = 'none';
-    document.getElementById('nameModal').style.display = 'none';
-  }
-
   /* ── Auto-join from URL ── */
-  const urlSessionId = new URLSearchParams(location.search).get('room');
-  if (urlSessionId && !sessionId) {
-    // Esperar a que DOM esté listo
-    setTimeout(() => {
-      showNameModal(urlSessionId, 'Sala compartida');
-    }, 100);
-  }
+  const urlRoom = new URLSearchParams(location.search).get('room');
+  if (urlRoom) setTimeout(() => openModal(urlRoom, ''), 120);
 
+  /* ── Enter session ── */
   async function enter(sid, name, roomName) {
     sessionId = sid;
     myName    = name;
     userId    = localUserId();
 
-    /* Create or update session metadata */
-    const sessionRef = ref(db, `sessions/${sessionId}`);
+    const sessionRef = ref(db, `sessions/${sid}`);
     const snap = await new Promise(res => onValue(sessionRef, res, { onlyOnce: true }));
+
     if (!snap.val()) {
-      /* New session */
       await set(sessionRef, {
-        roomName: roomName,
+        roomName: roomName || 'Sala compartida',
         createdAt: Date.now(),
         lastActive: Date.now(),
         revealed: false,
-        participants: {},
-        history: {}
+        participants: {}
       });
     }
 
-    /* Register presence */
-    const meRef = ref(db, `sessions/${sessionId}/participants/${userId}`);
+    const meRef = ref(db, `sessions/${sid}/participants/${userId}`);
     await set(meRef, { name, vote: null });
-
-    /* When I disconnect, only remove myself from participants */
     onDisconnect(meRef).remove();
 
-    /* Update URL for sharing */
     const u = new URL(location.href);
-    u.searchParams.set('s', sessionId);
+    u.searchParams.set('room', sid);
     window.history.replaceState({}, '', u);
 
-    /* Show session UI */
-    document.getElementById('roomCode').textContent  = sessionId;
-    document.getElementById('myNameDisplay').textContent = name;
-    document.getElementById('landing').style.display = 'none';
-    document.getElementById('session').style.display = 'flex';
+    const displayRoom = snap.val()?.roomName || roomName || 'Sala';
+    document.getElementById('sessRoomName').textContent   = displayRoom;
+    document.getElementById('myNameDisplay').textContent  = name;
+    document.getElementById('landing').style.display      = 'none';
+    document.getElementById('session').style.display      = 'flex';
 
     buildPickRow();
     subscribe();
-    setupCleanup();
+
+    cleanupTimer = setInterval(() => {
+      if (sessionId) update(ref(db, `sessions/${sessionId}`), { lastActive: Date.now() }).catch(() => {});
+    }, 30000);
   }
 
-  /* ── Auto-cleanup inactive sessions ── */
-  function setupCleanup() {
-    if (sessionTimer) clearInterval(sessionTimer);
-    sessionTimer = setInterval(() => {
-      if (sessionId) {
-        update(ref(db, `sessions/${sessionId}`), { lastActive: Date.now() }).catch(() => {});
-      }
-    }, 30000); /* Every 30 seconds */
-  }
-
-  /* ── Pick-card row ── */
+  /* ── Pick row ── */
   function buildPickRow() {
     const row = document.getElementById('pickRow');
     row.innerHTML = '';
     CARDS.forEach(v => {
       const t = document.createElement('div');
-      t.className = 'pick-tile';
+      t.className  = 'pick-tile';
       t.textContent = v;
-      t.dataset.v = v;
-      t.onclick = () => castVote(v);
+      t.dataset.v  = v;
+      t.onclick    = () => castVote(v);
       row.appendChild(t);
     });
   }
 
-  /* ── Firebase listener ── */
+  /* ── Subscribe ── */
   function subscribe() {
     onValue(ref(db, `sessions/${sessionId}`), snap => {
       const data = snap.val();
-      if (data && !data.deletedAt) {
-        render(data);
-      } else if (data?.deletedAt) {
-        /* Session was deleted */
-        showToast('La sesión ha sido cerrada', 4000);
-        setTimeout(() => location.reload(), 1500);
+      if (!data) return;
+      if (data.deletedAt) {
+        showToast('La sesión ha sido cerrada');
+        setTimeout(() => location.reload(), 1800);
+        return;
       }
+      render(data);
     });
   }
 
@@ -860,41 +950,56 @@
   function render(data) {
     const participants = data.participants || {};
     const revealed     = !!data.revealed;
-    const seats        = document.getElementById('participantsSeats');
-    seats.innerHTML    = '';
+    const entries      = Object.entries(participants);
 
-    const numericVotes = [];
     let votedCount = 0;
-    const entries = Object.entries(participants);
+    const numericVotes = [];
 
-    entries.forEach(([uid, p]) => {
+    /* ── Seats around table ── */
+    const wrap = document.getElementById('tableWrap');
+
+    /* Remove old seats */
+    wrap.querySelectorAll('.seat').forEach(s => s.remove());
+
+    const W = wrap.clientWidth  || 540;
+    const H = wrap.clientHeight || 270;
+    const cx = W / 2;
+    const cy = H / 2;
+    const rx = cx * 0.72;
+    const ry = cy * 0.72;
+    const total = entries.length;
+
+    entries.forEach(([uid, p], i) => {
       const hasVote = p.vote != null;
       if (hasVote) votedCount++;
 
-      /* Build seat */
+      /* Position: distribute evenly, start from top */
+      const angle = (2 * Math.PI * i / total) - Math.PI / 2;
+      const x = cx + rx * Math.cos(angle);
+      const y = cy + ry * Math.sin(angle);
+
       const seat = document.createElement('div');
       seat.className = 'seat';
+      seat.style.left = `${x}px`;
+      seat.style.top  = `${y}px`;
 
+      /* Card flipper */
       const flipper = document.createElement('div');
       flipper.className = 'card-flipper';
 
       const inner = document.createElement('div');
       inner.className = 'card-inner' + (revealed && hasVote ? ' flipped' : '');
 
-      /* Back of card (blue, hidden by default) */
       const back = document.createElement('div');
-      back.className = 'card-face card-back';
-      back.innerHTML = '🃏';
+      back.className = hasVote ? 'card-face card-back-face' : 'card-face card-back-face waiting';
+      back.textContent = hasVote ? '🃏' : '';
 
-      /* Front of card (value, shown when flipped) */
       const front = document.createElement('div');
-      front.className = 'card-face card-front' + (hasVote ? ' voted' : '');
+      front.className = 'card-face card-front-face';
       if (revealed && hasVote) {
         front.textContent = p.vote;
         const n = parseFloat(p.vote);
         if (!isNaN(n)) numericVotes.push(n);
-      } else if (hasVote) {
-        front.innerHTML = '✓';
       }
 
       inner.appendChild(back);
@@ -902,82 +1007,76 @@
       flipper.appendChild(inner);
 
       const nameEl = document.createElement('div');
-      nameEl.className = 'p-name' + (uid === userId ? ' me' : '');
+      nameEl.className  = 'p-name' + (uid === userId ? ' me' : '');
       nameEl.textContent = (uid === userId ? '★ ' : '') + p.name;
 
       seat.appendChild(flipper);
       seat.appendChild(nameEl);
-      seats.appendChild(seat);
+      wrap.appendChild(seat);
     });
 
+    /* Center text */
+    document.getElementById('tableCenterText').textContent =
+      revealed ? '' : (total === 0 ? 'Esperando…' : `${votedCount}/${total} votaron`);
+
+    /* Status */
+    document.getElementById('statusText').textContent = revealed
+      ? `Votos revelados — ${votedCount} de ${total} votaron`
+      : `${votedCount} de ${total} han votado`;
+
     /* Reveal button */
-    const revealBtn = document.getElementById('revealBtn');
-    revealBtn.disabled = revealed || votedCount === 0;
+    document.getElementById('revealBtn').disabled = revealed || votedCount === 0;
 
     /* Results */
-    const resultsBox = document.getElementById('resultsBox');
+    const panel = document.getElementById('resultsPanel');
     if (revealed && numericVotes.length > 0) {
-      const avg = (numericVotes.reduce((a, b) => a + b, 0) / numericVotes.length).toFixed(1);
+      const avg = (numericVotes.reduce((a,b)=>a+b,0) / numericVotes.length).toFixed(1);
       const min = Math.min(...numericVotes);
       const max = Math.max(...numericVotes);
       document.getElementById('resAvg').textContent = avg;
       document.getElementById('resMin').textContent = min;
       document.getElementById('resMax').textContent = max;
-      resultsBox.style.display = 'block';
+      panel.style.display = 'block';
+      /* consensus highlight */
+      if (min === max) {
+        wrap.querySelectorAll('.card-front-face').forEach(c => c.classList.add('consensus'));
+      }
     } else {
-      resultsBox.style.display = 'none';
+      panel.style.display = 'none';
     }
 
-    /* Sync my pick card highlight */
+    /* My card selection */
     myVote = participants[userId]?.vote ?? null;
-    document.querySelectorAll('.pick-tile').forEach(t => {
-      t.classList.toggle('selected', t.dataset.v === myVote);
-    });
+    document.querySelectorAll('.pick-tile').forEach(t =>
+      t.classList.toggle('selected', t.dataset.v === myVote)
+    );
 
-    /* Dim pick row when revealed */
-    const pickSection = document.getElementById('pickSection');
-    pickSection.style.opacity       = revealed ? '0.4' : '1';
-    pickSection.style.pointerEvents = revealed ? 'none'  : 'auto';
+    /* Dim pick area when revealed */
+    const ps = document.getElementById('pickSection');
+    ps.style.opacity       = revealed ? '0.4' : '1';
+    ps.style.pointerEvents = revealed ? 'none' : 'auto';
 
-    /* Render history */
     renderHistory();
-
-    /* Update last activity for cleanup */
-    if (sessionId) {
-      update(ref(db, `sessions/${sessionId}`), { lastActive: Date.now() }).catch(() => {});
-    }
   }
 
-  /* ── Render History ── */
+  /* ── History sidebar ── */
   function renderHistory() {
-    const container = document.getElementById('historyContainer');
-    if (history.length === 0) {
-      container.innerHTML = '<div class="sidebar-empty">Sin rondas votadas</div>';
+    const c = document.getElementById('historyContainer');
+    if (roundHistory.length === 0) {
+      c.innerHTML = '<div class="hist-empty">Aquí aparecerán<br>las rondas votadas</div>';
       return;
     }
-
-    container.innerHTML = '';
-    [...history].reverse().forEach((round, idx) => {
-      const item = document.createElement('div');
-      item.className = 'history-item';
-
-      const roundNum = document.createElement('div');
-      roundNum.className = 'history-round';
-      roundNum.textContent = `Ronda ${history.length - idx}`;
-
-      const votes = document.createElement('div');
-      votes.className = 'history-votes';
-      const voteList = Object.values(round.votes).join(', ') || '—';
-      votes.textContent = voteList;
-
-      const avg = document.createElement('div');
-      avg.className = 'history-avg';
-      avg.textContent = `⌀ ${round.avg || '—'}`;
-
-      item.appendChild(roundNum);
-      item.appendChild(votes);
-      item.appendChild(avg);
-      container.appendChild(item);
+    c.innerHTML = '';
+    [...roundHistory].reverse().forEach((round, i) => {
+      const n = roundHistory.length - i;
+      const el = document.createElement('div');
+      el.className = 'hist-item';
+      el.innerHTML = `
+        <div class="hist-round">Ronda ${n}</div>
+        <div class="hist-votes">${Object.entries(round.votes).map(([,v]) => v).join(' · ') || '—'}</div>
+        <div class="hist-avg">⌀ ${round.avg ?? '—'}</div>
+      `;
+      c.appendChild(el);
     });
   }
 
@@ -994,32 +1093,22 @@
 
   async function newRound() {
     if (!sessionId) return;
-
-    /* Read current participants */
     const snap = await new Promise(res =>
       onValue(ref(db, `sessions/${sessionId}/participants`), res, { onlyOnce: true })
     );
     const parts = snap.val() || {};
-
-    /* Calculate avg before resetting */
     const votes = {};
-    const numericVotes = [];
-    Object.entries(parts).forEach(([uid, p]) => {
+    const nums  = [];
+    Object.entries(parts).forEach(([, p]) => {
       if (p.vote) {
-        votes[uid] = p.vote;
+        votes[p.name] = p.vote;
         const n = parseFloat(p.vote);
-        if (!isNaN(n)) numericVotes.push(n);
+        if (!isNaN(n)) nums.push(n);
       }
     });
+    const avg = nums.length ? (nums.reduce((a,b)=>a+b,0)/nums.length).toFixed(1) : null;
+    roundHistory.push({ votes, avg });
 
-    const avg = numericVotes.length > 0
-      ? (numericVotes.reduce((a, b) => a + b, 0) / numericVotes.length).toFixed(1)
-      : null;
-
-    /* Save to history */
-    history.push({ votes, avg, timestamp: Date.now() });
-
-    /* Reset for next round */
     const updates = { [`sessions/${sessionId}/revealed`]: false };
     Object.keys(parts).forEach(uid => {
       updates[`sessions/${sessionId}/participants/${uid}/vote`] = null;
@@ -1030,10 +1119,10 @@
 
   async function copyLink() {
     const u = new URL(location.href);
-    u.searchParams.set('s', sessionId);
+    u.searchParams.set('room', sessionId);
     try {
       await navigator.clipboard.writeText(u.toString());
-      showToast('¡Enlace copiado! Compártelo con tu equipo 🚀');
+      showToast('¡Enlace copiado!');
     } catch {
       showToast(u.toString(), 6000);
     }
