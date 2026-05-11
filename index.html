@@ -561,18 +561,26 @@
   <div class="panel">
     <h2>Planning Poker</h2>
 
-    <label for="roomNameInput">Nombre de la sala</label>
-    <input id="roomNameInput" type="text" placeholder="Ej: Sprint Planning" maxlength="32" />
+    <div id="landingView">
+      <label for="roomNameInput">Nombre de la sala</label>
+      <input id="roomNameInput" type="text" placeholder="Ej: Sprint Planning" maxlength="32" />
+      <button class="btn-primary" onclick="createNewSession()">✦ Crear sala</button>
+      <p style="font-size: 0.8rem; color: var(--text-secondary); text-align: center; margin-top: 1rem;">
+        O accede a través del enlace que compartieron contigo
+      </p>
+    </div>
 
-    <label for="codeInput">Código de acceso (opcional)</label>
-    <input id="codeInput" type="text" placeholder="Ej: sprintplanning010320241530" maxlength="50"
-           style="text-transform:lowercase;letter-spacing:.05em" />
-
-    <button class="btn-primary" id="joinBtn" onclick="joinSession()">Unirse →</button>
-
-    <div class="divider">o</div>
-
-    <button class="btn-ghost" onclick="createSession()">✦ Crear nueva sala</button>
+    <div id="linkView" style="display:none">
+      <div style="background: var(--surface2); border: 2px solid var(--primary); border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem;">
+        <div style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.8rem;">Comparte este enlace</div>
+        <div style="display: flex; gap: 0.5rem;">
+          <input id="shareLink" type="text" readonly style="flex: 1; font-size: 0.85rem; padding: 0.6rem;" />
+          <button onclick="copyShareLink()" style="background: var(--primary); color: #fff; padding: 0.6rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">📋</button>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="enterSession()">Entrar a la sala</button>
+      <button class="btn-ghost" style="margin-top: 0.75rem;" onclick="backToLanding()">← Atrás</button>
+    </div>
   </div>
 </div>
 
@@ -682,21 +690,68 @@
   }
 
   /* ── Entry points ── */
-  function createSession() {
-    const name = document.getElementById('nameInput').value.trim();
-    if (!name) { showToast('Escribe tu nombre primero'); return; }
-    enter(uid(6), name);
+  let pendingRoomName = null;
+  let pendingSessionId = null;
+
+  function generateSessionId() {
+    return uid(8);
   }
 
-  function joinSession() {
-    const name = document.getElementById('nameInput').value.trim();
-    const code = document.getElementById('codeInput').value.trim().toUpperCase();
-    if (!name) { showToast('Escribe tu nombre primero'); return; }
-    if (!code) { showToast('Introduce el código de sala'); return; }
-    enter(code, name);
+  function createNewSession() {
+    const roomName = document.getElementById('roomNameInput').value.trim();
+    if (!roomName) { showToast('Escribe el nombre de la sala'); return; }
+
+    pendingRoomName = roomName;
+    pendingSessionId = generateSessionId();
+
+    const link = new URL(location.href);
+    link.searchParams.set('room', pendingSessionId);
+    document.getElementById('shareLink').value = link.toString();
+
+    document.getElementById('landingView').style.display = 'none';
+    document.getElementById('linkView').style.display = 'block';
   }
 
-  async function enter(sid, name) {
+  function copyShareLink() {
+    const link = document.getElementById('shareLink');
+    link.select();
+    navigator.clipboard.writeText(link.value).then(() => {
+      showToast('¡Enlace copiado!');
+    }).catch(() => {
+      showToast(link.value, 5000);
+    });
+  }
+
+  function enterSession() {
+    if (!pendingSessionId || !pendingRoomName) return;
+    const name = prompt('¿Cuál es tu nombre?');
+    if (name && name.trim()) {
+      enter(pendingSessionId, name.trim(), pendingRoomName);
+    } else if (name !== null) {
+      showToast('Nombre requerido');
+    }
+  }
+
+  function backToLanding() {
+    pendingRoomName = null;
+    pendingSessionId = null;
+    document.getElementById('landingView').style.display = 'block';
+    document.getElementById('linkView').style.display = 'none';
+  }
+
+  /* ── Auto-join from URL ── */
+  const urlSessionId = new URLSearchParams(location.search).get('room');
+  if (urlSessionId && !sessionId) {
+    // Esperar a que DOM esté listo
+    setTimeout(() => {
+      const name = prompt('¿Cuál es tu nombre para entrar a la sala?');
+      if (name && name.trim()) {
+        enter(urlSessionId, name.trim(), 'Sala compartida');
+      }
+    }, 100);
+  }
+
+  async function enter(sid, name, roomName) {
     sessionId = sid;
     myName    = name;
     userId    = localUserId();
@@ -707,6 +762,7 @@
     if (!snap.val()) {
       /* New session */
       await set(sessionRef, {
+        roomName: roomName,
         createdAt: Date.now(),
         lastActive: Date.now(),
         revealed: false,
