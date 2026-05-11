@@ -663,15 +663,13 @@
   let sessionTimer = null;
 
   /* ── Expose to HTML onclick ── */
-  window.createSession = createSession;
-  window.joinSession   = joinSession;
-  window.revealVotes   = revealVotes;
-  window.newRound      = newRound;
-  window.copyLink      = copyLink;
-
-  /* ── Pre-fill code from URL ── */
-  const urlCode = new URLSearchParams(location.search).get('s');
-  if (urlCode) document.getElementById('codeInput').value = urlCode.toUpperCase();
+  window.createNewSession = createNewSession;
+  window.copyShareLink    = copyShareLink;
+  window.enterSession     = enterSession;
+  window.backToLanding    = backToLanding;
+  window.revealVotes      = revealVotes;
+  window.newRound         = newRound;
+  window.copyLink         = copyLink;
 
   /* ── Helpers ── */
   function uid(len = 6) { return Math.random().toString(36).slice(2, 2 + len).toUpperCase(); }
